@@ -2,7 +2,7 @@
 using TouchPhase = UnityEngine.TouchPhase;
 
 
-public class TouchController : MonoBehaviour
+public class CharacterSelectionController : MonoBehaviour
 {
     public int pixelDistToDetect = 20;
     private Animate _animate;
