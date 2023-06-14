@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 356219718}
   m_Layer: 0
   m_Name: GroundB
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -979,7 +979,7 @@ GameObject:
   - component: {fileID: 479109597}
   m_Layer: 0
   m_Name: GroundA
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1826,7 +1826,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6549556905249084446, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
 --- !u!1 &1149289210
 GameObject:

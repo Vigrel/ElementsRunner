@@ -45,6 +45,7 @@ public class CharacterSelectionController : MonoBehaviour
 
         if (_directionChosen)
         {
+            if (Input.touchCount <= 0) return;
             _direction = Input.touches[0].position - _startPos;
             
             if (Mathf.Abs(_direction.x) < pixelDistToDetect && Mathf.Abs(_direction.y) < pixelDistToDetect)

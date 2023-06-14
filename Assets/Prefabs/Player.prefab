@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5762988061652805348}
   - component: {fileID: 5762988061652805349}
   - component: {fileID: 2521822657741257799}
-  - component: {fileID: 6549556905249084446}
+  - component: {fileID: 495612018970480560}
   - component: {fileID: 744025323004553901}
   - component: {fileID: -5211720190925578249}
   - component: {fileID: 2766499065043563709}
@@ -111,19 +111,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &6549556905249084446
+--- !u!114 &495612018970480560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5762988061652805346}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 690c10c5fdceb7a95924684da58bf2f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9481e8062d077104d9363333ba226323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelDistToDetect: 20
+  maxVerticalVelocity: 7
+  tilemap: {fileID: 0}
 --- !u!114 &744025323004553901
 MonoBehaviour:
   m_ObjectHideFlags: 0
