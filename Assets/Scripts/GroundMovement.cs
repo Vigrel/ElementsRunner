@@ -13,6 +13,7 @@ public class GroundMovement : MonoBehaviour
     private Renderer BRenderer;
     private Vector3 initialPosition;
     private float rightmostPosition;
+    private float defaultSpeed;
 
     private bool isARight = false;
 
@@ -20,6 +21,7 @@ public class GroundMovement : MonoBehaviour
     {
         ATransform = tilemapA.GetComponent<Transform>();
         ARenderer = tilemapA.GetComponent<Renderer>();
+        defaultSpeed = speed;
 
         initialPosition = ATransform.position;
         BTransform = tilemapB.GetComponent<Transform>();
@@ -70,5 +72,15 @@ public class GroundMovement : MonoBehaviour
             BTransform.position.y,
             BTransform.position.z
         );
+    }
+
+    public void setDefaultSpeed()
+    {
+        speed = defaultSpeed;
+    }
+
+    public void SetSpeed(float newSpeed)
+    {
+        speed = newSpeed;
     }
 }

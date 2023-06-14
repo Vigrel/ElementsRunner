@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using TouchPhase = UnityEngine.TouchPhase;
 
-
 public class CharacterSelectionController : MonoBehaviour
 {
     public int pixelDistToDetect = 20;
@@ -15,7 +14,7 @@ public class CharacterSelectionController : MonoBehaviour
         _directionChosen = false;
         if (Mathf.Abs(_direction.x) > Mathf.Abs(_direction.y))
             return _direction.x > 0 ? "right" : "left";
-        
+
         return _direction.y > 0 ? "up" : "down";
     }
 
@@ -30,13 +29,16 @@ public class CharacterSelectionController : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
+            if (touch.position.x > Screen.width / 2)
+                return;
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
                     _startPos = touch.position;
                     _directionChosen = true;
                     break;
-                
+
                 //case TouchPhase.Ended:
                 //    _directionChosen = false;
                 //    break;
@@ -45,12 +47,16 @@ public class CharacterSelectionController : MonoBehaviour
 
         if (_directionChosen)
         {
-            if (Input.touchCount <= 0) return;
-            _direction = Input.touches[0].position - _startPos;
-            
-            if (Mathf.Abs(_direction.x) < pixelDistToDetect && Mathf.Abs(_direction.y) < pixelDistToDetect)
+            if (Input.touchCount <= 0)
                 return;
-            
+            _direction = Input.touches[0].position - _startPos;
+
+            if (
+                Mathf.Abs(_direction.x) < pixelDistToDetect
+                && Mathf.Abs(_direction.y) < pixelDistToDetect
+            )
+                return;
+
             _animate.change_element = SwipeDirection() switch
             {
                 "up" => 0,
@@ -61,5 +67,4 @@ public class CharacterSelectionController : MonoBehaviour
             };
         }
     }
-    
 }
