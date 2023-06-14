@@ -1770,6 +1770,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 744025323004553901, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5762988061652805346, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
       propertyPath: m_Name
       value: SpriteSheet_0
@@ -1816,6 +1820,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5762988061652805348, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549556905249084446, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
