@@ -7,8 +7,8 @@ public class GroundMovement : MonoBehaviour
     public float speed = 1f; // Adjust this value to control the speed of the movement
     public GameObject tilemapA; // The first tilemap instance
     public GameObject tilemapB; // The second tilemap instance
-    private Transform ATransform;
-    private Transform BTransform;
+    public Transform ATransform;
+    public Transform BTransform;
     private Renderer ARenderer;
     private Renderer BRenderer;
     private Vector3 initialPosition;
@@ -26,6 +26,7 @@ public class GroundMovement : MonoBehaviour
         initialPosition = ATransform.position;
         BTransform = tilemapB.GetComponent<Transform>();
         BRenderer = tilemapB.GetComponent<Renderer>();
+        
         // Ao iniciar o jogo, a posição do tilemap B eh alinhada via script para a direita do tilemap A
         rightmostPosition = ATransform.position.x + (ARenderer.bounds.size.x);
         BTransform.position = new Vector3(
