@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// using System;
+
 public class CharacterAbilityController : MonoBehaviour
 {
     // General variables
@@ -99,26 +101,20 @@ public class CharacterAbilityController : MonoBehaviour
                 case TouchPhase.Ended:
                     _endTime = Time.time;
                     _touchedScreen = true;
-                    _dashDuration = (_endTime - _startTime) * dashMultiplier;
+                    _dashDuration = Mathf.Max((_endTime - _startTime), 0.5f) * dashMultiplier;
+
                     break;
             }
         }
 
         if (_touchedScreen)
         {
-            Debug.Log(_dashDuration);
-            Debug.Log(_endTime);
-            Debug.Log(Time.time);
-            Debug.Log((_endTime + _dashDuration));
-
             if ((_endTime + _dashDuration) < Time.time)
             {
-                Debug.Log("Fim do dash");
                 _groundMovement.setDefaultSpeed();
                 _touchedScreen = false;
                 return;
             }
-            Debug.Log("Aumentando velocidade");
             _groundMovement.SetSpeed(10 * Time.deltaTime + _groundMovement.speed);
         }
     }

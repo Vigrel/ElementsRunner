@@ -123,6 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9481e8062d077104d9363333ba226323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashMultiplier: 1
+  grounds: {fileID: 0}
   maxVerticalVelocity: 7
 --- !u!114 &744025323004553901
 MonoBehaviour:
@@ -215,6 +217,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.020913064, y: -1.0724931}
-  m_Size: {x: 0.8894919, y: 1.3006916}
+  m_Offset: {x: 0, y: -0.03013742}
+  m_Size: {x: 0.8894919, y: 1.2531114}
   m_Direction: 0
