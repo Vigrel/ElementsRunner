@@ -1770,10 +1770,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5211720190925578249, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -5211720190925578249, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: m_GravityScale
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
       propertyPath: grounds
       value: 
       objectReference: {fileID: 1149289210}
+    - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: glideGravityScale
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: defaultGravityScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: maxVerticalVelocity
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5762988061652805346, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
       propertyPath: m_Name
       value: SpriteSheet_0

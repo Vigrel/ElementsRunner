@@ -8,6 +8,7 @@ public class CharacterSelectionController : MonoBehaviour
     private Vector2 _startPos;
     private Vector2 _direction;
     private bool _directionChosen;
+    private CharacterAbilityController _abilityController;
 
     private string SwipeDirection()
     {
@@ -21,6 +22,7 @@ public class CharacterSelectionController : MonoBehaviour
     private void Start()
     {
         _animate = GetComponent<Animate>();
+        _abilityController = GetComponent<CharacterAbilityController>();
     }
 
     private void Update()
@@ -32,16 +34,15 @@ public class CharacterSelectionController : MonoBehaviour
             if (touch.position.x > Screen.width / 2)
                 return;
 
+            if (_abilityController.isDashing == true) return;
+            if (_abilityController.isGliding == true) return;
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
                     _startPos = touch.position;
                     _directionChosen = true;
                     break;
-
-                //case TouchPhase.Ended:
-                //    _directionChosen = false;
-                //    break;
             }
         }
 

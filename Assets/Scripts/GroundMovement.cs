@@ -74,7 +74,7 @@ public class GroundMovement : MonoBehaviour
         );
     }
 
-    public void setDefaultSpeed()
+    public void SetDefaultSpeed()
     {
         speed = defaultSpeed;
     }

@@ -8,7 +8,7 @@ using UnityEngine.Tilemaps;
 public class CharacterAbilityController : MonoBehaviour
 {
     // General variables
-    private bool _touchedScreen;
+    //private bool _touchedScreen;
     private bool _isGrounded = true;
     private Animate _animate;
     private Rigidbody2D _rb;
@@ -16,13 +16,20 @@ public class CharacterAbilityController : MonoBehaviour
     // WindAbility variables
     public float dashMultiplier = 1f;
     public GameObject grounds;
+    public bool isDashing = false;
     private float _startTime;
     private float _endTime;
-    private GroundMovement _groundMovement;
     private float _dashDuration;
+    private GroundMovement _groundMovement;
 
     // FireAbility variables
     public float maxVerticalVelocity = 7f;
+    public bool isJumping = false;
+    
+    // WaterAbility variables
+    public float defaultGravityScale = 1f;
+    public float glideGravityScale = 0.5f;
+    public bool isGliding;
 
     // Start is called before the first frame update
     private void Start()
@@ -39,6 +46,9 @@ public class CharacterAbilityController : MonoBehaviour
         {
             case 0:
                 FireAbility();
+                break;
+            case 1:
+                WaterAbility();
                 break;
             case 2:
                 WindAbility();
@@ -62,26 +72,26 @@ public class CharacterAbilityController : MonoBehaviour
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    _touchedScreen = true;
+                    isJumping = true;
                     break;
             }
         }
 
-        if (_touchedScreen && _isGrounded)
+        if (isJumping && _isGrounded)
         {
             // Calculate the force needed to reach the maximum allowed velocity
             Vector2 currentVelocity = _rb.velocity;
             float forceY = Mathf.Max(
                 0f,
-                (maxVerticalVelocity - currentVelocity.y) * _rb.mass / Time.fixedDeltaTime
+                (maxVerticalVelocity - currentVelocity.y) * _rb.mass * maxVerticalVelocity / Time.fixedDeltaTime
             );
 
             // Clamp the force to the maximum jump force and add it to the Rigidbody
-            Vector2 forceToAdd = new Vector2(0f, Mathf.Clamp(forceY, 0f, 400f));
+            Vector2 forceToAdd = new Vector2(0f, forceY);
             _rb.AddForce(forceToAdd);
             _isGrounded = false;
 
-            _touchedScreen = false;
+            isJumping = false;
         }
     }
 
@@ -100,22 +110,51 @@ public class CharacterAbilityController : MonoBehaviour
 
                 case TouchPhase.Ended:
                     _endTime = Time.time;
-                    _touchedScreen = true;
+                    isDashing = true;
                     _dashDuration = Mathf.Max((_endTime - _startTime), 0.5f) * dashMultiplier;
-
                     break;
             }
         }
 
-        if (_touchedScreen)
+        if (isDashing)
         {
             if ((_endTime + _dashDuration) < Time.time)
             {
-                _groundMovement.setDefaultSpeed();
-                _touchedScreen = false;
+                _groundMovement.SetDefaultSpeed();
+                isDashing = false;
                 return;
             }
+
             _groundMovement.SetSpeed(10 * Time.deltaTime + _groundMovement.speed);
+        }
+    }
+
+    private void WaterAbility()
+    {
+        if (Input.touchCount > 0 && !_isGrounded)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.position.x < (Screen.width / 2))
+                return;
+            
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    isGliding = true;
+                    _rb.gravityScale = glideGravityScale;
+                    break;
+
+                case TouchPhase.Ended:
+                    isGliding = false;
+                    _rb.gravityScale = defaultGravityScale;
+                    break;
+            }
+        }
+
+        if (_isGrounded)
+        {
+            isGliding = false;
+            _rb.gravityScale = defaultGravityScale;
         }
     }
 }
