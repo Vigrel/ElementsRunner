@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 // using System;
 
@@ -14,6 +15,8 @@ public class CharacterAbilityController : MonoBehaviour
     private Rigidbody2D _rb;
 
     // WindAbility variables
+    public GameObject obstacleManager;
+    private ObstacleMovement _obstacleMovement;
     public float dashMultiplier = 1f;
     public GameObject grounds;
     public bool isDashing = false;
@@ -37,6 +40,7 @@ public class CharacterAbilityController : MonoBehaviour
         _animate = GetComponent<Animate>();
         _rb = GetComponent<Rigidbody2D>();
         _groundMovement = grounds.GetComponent<GroundMovement>();
+        _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
     }
 
     // Update is called once per frame
@@ -60,6 +64,9 @@ public class CharacterAbilityController : MonoBehaviour
     {
         if (hit.gameObject.CompareTag("Ground"))
             _isGrounded = true;
+
+        if (hit.gameObject.CompareTag("Obstacle"))
+            SceneManager.LoadScene("end_game");
     }
 
     private void FireAbility()
@@ -97,7 +104,7 @@ public class CharacterAbilityController : MonoBehaviour
 
     private void WindAbility()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && !isDashing)
         {
             Touch touch = Input.GetTouch(0);
             if (touch.position.x < (Screen.width / 2))
@@ -111,7 +118,8 @@ public class CharacterAbilityController : MonoBehaviour
                 case TouchPhase.Ended:
                     _endTime = Time.time;
                     isDashing = true;
-                    _dashDuration = Mathf.Max((_endTime - _startTime), 0.5f) * dashMultiplier;
+                    _dashDuration = Mathf.Max((_endTime - _startTime), 0.2f) * dashMultiplier;
+                    _obstacleMovement.SetCurrentObstacleCollider(false);
                     break;
             }
         }
@@ -122,6 +130,7 @@ public class CharacterAbilityController : MonoBehaviour
             {
                 _groundMovement.SetDefaultSpeed();
                 isDashing = false;
+                _obstacleMovement.SetCurrentObstacleCollider(true);
                 return;
             }
 

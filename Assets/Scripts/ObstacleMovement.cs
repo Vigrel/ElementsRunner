@@ -5,6 +5,7 @@ using Random = System.Random;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEngine.Tilemaps;
 
 public class ObstacleMovement : MonoBehaviour
 {
@@ -12,13 +13,16 @@ public class ObstacleMovement : MonoBehaviour
     public GameObject groundA;
     public GameObject groundB;
     public List<GameObject> obstacles;
-
+    public GameObject player;
+    
     private GroundMovement _groundScript;
     private Transform _aTransform;
     private Transform _bTransform;
+    private CharacterAbilityController _playerAbilityScript;
     
     private GameObject _currObstacle;
     private Transform _currTransform;
+    private TilemapCollider2D _currCollider;
     private bool _localIsARight;
 
     GameObject GetRandomObstacle()
@@ -29,7 +33,14 @@ public class ObstacleMovement : MonoBehaviour
 
     void SetCurrentObstacleTransform()
     {
+        _playerAbilityScript = player.GetComponent<CharacterAbilityController>();
         _currTransform = _currObstacle.GetComponent<Transform>();
+        _currCollider = _currObstacle.GetComponent<TilemapCollider2D>();
+    }
+
+    public void SetCurrentObstacleCollider(bool state)
+    {
+        _currCollider.enabled = state;
     }
 
     void Start()
@@ -43,7 +54,7 @@ public class ObstacleMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         _currTransform.position = _bTransform.position;
     }

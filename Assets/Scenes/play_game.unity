@@ -219,6 +219,7 @@ MonoBehaviour:
   groundB: {fileID: 1766709609}
   obstacles:
   - {fileID: 1989644928}
+  player: {fileID: 1001082165}
 --- !u!1 &356219713
 GameObject:
   m_ObjectHideFlags: 0
@@ -2382,6 +2383,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1149289210}
     - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: dashMultiplier
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: obstacleManager
+      value: 
+      objectReference: {fileID: 343459551}
+    - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
       propertyPath: glideGravityScale
       value: 0.5
       objectReference: {fileID: 0}
@@ -2443,6 +2452,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+--- !u!1 &1001082165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5762988061652805346, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+  m_PrefabInstance: {fileID: 946331570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1149289210
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,7 +2505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceb8625391ca5485ebafbb8d8a0bae49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 5
   tilemapA: {fileID: 479109593}
   tilemapB: {fileID: 1766709609}
   ATransform: {fileID: 0}
@@ -4179,7 +4193,7 @@ GameObject:
   - component: {fileID: 1989644930}
   m_Layer: 0
   m_Name: ObstacleA
-  m_TagString: Ground
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
