@@ -15,7 +15,7 @@ public class GroundMovement : MonoBehaviour
     private float rightmostPosition;
     private float defaultSpeed;
 
-    private bool isARight = false;
+    public bool isARight { get; private set; } = false;
 
     private void Start()
     {
