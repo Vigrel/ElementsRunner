@@ -31,9 +31,7 @@ public class CharacterSelectionController : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (touch.position.x > Screen.width / 2)
-                return;
-
+            if (touch.position.x > Screen.width / 2) return;
             if (_abilityController.isDashing == true) return;
             if (_abilityController.isGliding == true) return;
 

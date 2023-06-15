@@ -15,15 +15,21 @@ public class CharacterAbilityController : MonoBehaviour
     private Rigidbody2D _rb;
 
     // WindAbility variables
+    public ParticleSystem dashParticleSystem;
     public GameObject obstacleManager;
     private ObstacleMovement _obstacleMovement;
     public float dashMultiplier = 1f;
+    public float dashCooldown;
+    public float dashTransparency = 0.2f;  
     public GameObject grounds;
     public bool isDashing = false;
+    private bool _dashStarted = false;
     private float _startTime;
     private float _endTime;
     private float _dashDuration;
     private GroundMovement _groundMovement;
+    private SpriteRenderer _spriteRenderer;
+    private float _dashCooldownTimer;
 
     // FireAbility variables
     public float maxVerticalVelocity = 7f;
@@ -37,8 +43,10 @@ public class CharacterAbilityController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        dashParticleSystem.Stop();
         _animate = GetComponent<Animate>();
         _rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _groundMovement = grounds.GetComponent<GroundMovement>();
         _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
     }
@@ -104,7 +112,7 @@ public class CharacterAbilityController : MonoBehaviour
 
     private void WindAbility()
     {
-        if (Input.touchCount > 0 && !isDashing)
+        if (Input.touchCount > 0 && !isDashing && (_dashCooldownTimer < Time.time))
         {
             Touch touch = Input.GetTouch(0);
             if (touch.position.x < (Screen.width / 2))
@@ -112,14 +120,28 @@ public class CharacterAbilityController : MonoBehaviour
             switch (touch.phase)
             {
                 case TouchPhase.Began:
+                    _dashStarted = true;
                     _startTime = Time.time;
+                    // Play the particle system
+                    dashParticleSystem.Play();
                     break;
 
                 case TouchPhase.Ended:
+                    if (!_dashStarted) return;
                     _endTime = Time.time;
                     isDashing = true;
+                    _dashStarted = false;
+                    _dashCooldownTimer = _dashDuration + dashCooldown;
                     _dashDuration = Mathf.Max((_endTime - _startTime), 0.2f) * dashMultiplier;
                     _obstacleMovement.SetCurrentObstacleCollider(false);
+                    
+                    // Stop the particle system
+                    dashParticleSystem.Stop();
+                    
+                    // Add transparency to the sprite
+                    Color color = _spriteRenderer.color;
+                    color.a = dashTransparency;
+                    _spriteRenderer.color = color;
                     break;
             }
         }
@@ -131,6 +153,10 @@ public class CharacterAbilityController : MonoBehaviour
                 _groundMovement.SetDefaultSpeed();
                 isDashing = false;
                 _obstacleMovement.SetCurrentObstacleCollider(true);
+                // Remove transparency from the sprite
+                Color color = _spriteRenderer.color;
+                color.a = 1f;
+                _spriteRenderer.color = color;
                 return;
             }
 

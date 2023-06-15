@@ -123,9 +123,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9481e8062d077104d9363333ba226323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacleManager: {fileID: 0}
   dashMultiplier: 1
   grounds: {fileID: 0}
+  isDashing: 0
   maxVerticalVelocity: 7
+  isJumping: 0
+  defaultGravityScale: 1
+  glideGravityScale: 0.5
+  isGliding: 0
 --- !u!114 &744025323004553901
 MonoBehaviour:
   m_ObjectHideFlags: 0

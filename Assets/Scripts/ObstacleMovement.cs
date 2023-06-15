@@ -54,8 +54,10 @@ public class ObstacleMovement : MonoBehaviour
 
     public void SetCurrentObstacleCollider(bool state)
     {
-        _currObstacleA.Collider.enabled = state;
-        _currObstacleB.Collider.enabled = state;
+        if(_currObstacleA != null)
+            _currObstacleA.Collider.enabled = state;
+        if(_currObstacleB != null)
+            _currObstacleB.Collider.enabled = state;
     }
     
     
