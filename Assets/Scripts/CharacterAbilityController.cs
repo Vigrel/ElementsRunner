@@ -13,6 +13,7 @@ public class CharacterAbilityController : MonoBehaviour
     private bool _isGrounded = true;
     private Animate _animate;
     private Rigidbody2D _rb;
+    private CapsuleCollider2D _collider;
 
     // WindAbility variables
     public ParticleSystem dashParticleSystem;
@@ -39,13 +40,16 @@ public class CharacterAbilityController : MonoBehaviour
     public float defaultGravityScale = 1f;
     public float glideGravityScale = 0.5f;
     public bool isGliding;
+    public ParticleSystem glideParticleSystem;
 
     // Start is called before the first frame update
     private void Start()
     {
         dashParticleSystem.Stop();
+        glideParticleSystem.Stop();
         _animate = GetComponent<Animate>();
         _rb = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<CapsuleCollider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _groundMovement = grounds.GetComponent<GroundMovement>();
         _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
@@ -133,7 +137,11 @@ public class CharacterAbilityController : MonoBehaviour
                     _dashStarted = false;
                     _dashCooldownTimer = _dashDuration + dashCooldown;
                     _dashDuration = Mathf.Max((_endTime - _startTime), 0.2f) * dashMultiplier;
-                    _obstacleMovement.SetCurrentObstacleCollider(false);
+                    //_obstacleMovement.SetCurrentObstacleCollider(false);
+                    
+                    // Ignore obstacles
+                    _rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                    _collider.enabled = false;
                     
                     // Stop the particle system
                     dashParticleSystem.Stop();
@@ -152,11 +160,15 @@ public class CharacterAbilityController : MonoBehaviour
             {
                 _groundMovement.SetDefaultSpeed();
                 isDashing = false;
-                _obstacleMovement.SetCurrentObstacleCollider(true);
+                //_obstacleMovement.SetCurrentObstacleCollider(true);
                 // Remove transparency from the sprite
                 Color color = _spriteRenderer.color;
                 color.a = 1f;
                 _spriteRenderer.color = color;
+                
+                // Stop ignoring obstacles
+                //_rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                _collider.enabled = true;
                 return;
             }
 
@@ -177,17 +189,20 @@ public class CharacterAbilityController : MonoBehaviour
                 case TouchPhase.Began:
                     isGliding = true;
                     _rb.gravityScale = glideGravityScale;
+                    glideParticleSystem.Play();
                     break;
 
                 case TouchPhase.Ended:
                     isGliding = false;
                     _rb.gravityScale = defaultGravityScale;
+                    glideParticleSystem.Stop();
                     break;
             }
         }
 
         if (_isGrounded)
         {
+            glideParticleSystem.Stop();
             isGliding = false;
             _rb.gravityScale = defaultGravityScale;
         }
