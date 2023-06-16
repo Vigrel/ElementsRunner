@@ -6,6 +6,6 @@ using UnityEngine.SceneManagement;
 public class MainMenuScript : MonoBehaviour
 {
     public void GoToMainMenu(){
-        SceneManager.LoadScene("main_menu");
+        SceneManager.LoadScene("end_game");
     }
 }

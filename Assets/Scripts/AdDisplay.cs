@@ -15,6 +15,8 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
     public bool adCompleted;
     public GameObject player;
     public GameObject deathCanva;
+    public GameObject obstacle;
+    private ObstacleMovement _obstacleMovementScript;
 
     private bool testMode = true;
 
@@ -29,6 +31,7 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
                 myAdUnitId = adUnitIdAndroid;
         #endif
 
+        _obstacleMovementScript = obstacle.GetComponent<ObstacleMovement>();
     }
 
     // Update is called once per frame
@@ -47,50 +50,51 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
 
     public void OnInitializationComplete()
     {
-        Debug.Log("Unity Ads initialization complete.");
+        //Debug.Log("Unity Ads initialization complete.");
         Advertisement.Load(myAdUnitId,this);
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)
     {
         myAdStatus = message;
-        Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
+        //Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
     }
 
     public void OnUnityAdsAdLoaded(string adUnitId)
     {
-        Debug.Log("Ad Loaded: " + adUnitId);
+        //Debug.Log("Ad Loaded: " + adUnitId);
     }
     public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
     {
         myAdStatus = message;
-        Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
+        //Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
 
     }
 
     public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
     {
         myAdStatus = message;
-        Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
+        //Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
     }
 
     public void OnUnityAdsShowStart(string adUnitId)
     {
         adStarted = true;
-        Debug.Log("Ad Started: " + adUnitId);
+        //Debug.Log("Ad Started: " + adUnitId);
     }
 
     public void OnUnityAdsShowClick(string adUnitId)
     {
-        Debug.Log("Ad Clicked: " + adUnitId);
+        //Debug.Log("Ad Clicked: " + adUnitId);
     }
 
     public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
     {
         adCompleted = showCompletionState == UnityAdsShowCompletionState.COMPLETED;
-        Debug.Log("Ad Completed: " + adUnitId);
+        //Debug.Log("Ad Completed: " + adUnitId);
         deathCanva.SetActive(false);
-        player.transform.position = new Vector2(0, player.transform.position.y);
+        player.transform.position = new Vector2(0, 0);
+        _obstacleMovementScript.ResetObstacles();
         player.GetComponent<CharacterAbilityController>().AdSeen = true;
     }
 

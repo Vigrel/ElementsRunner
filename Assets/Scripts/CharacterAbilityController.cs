@@ -17,6 +17,8 @@ public class CharacterAbilityController : MonoBehaviour
     private Animate _animate;
     private Rigidbody2D _rb;
     private CapsuleCollider2D _collider;
+    public GameObject CameraObject;
+    private Camera _cam;
 
     // WindAbility variables
     public ParticleSystem dashParticleSystem;
@@ -59,6 +61,7 @@ public class CharacterAbilityController : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _groundMovement = grounds.GetComponent<GroundMovement>();
         _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
+        _cam = CameraObject.GetComponent<Camera>();
         deathCanva.SetActive(false);
 
     }
@@ -66,14 +69,14 @@ public class CharacterAbilityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 raycastOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
-        Debug.DrawRay(raycastOrigin, Vector2.right * 0.5f, Color.red);
-        
-        Vector2 raycastOrigin2 = new Vector2(transform.position.x - 1.75f, transform.position.y + 0.75f);
-        Debug.DrawRay(raycastOrigin2, Vector2.right * 3.5f, Color.red);
-        
-        Vector2 raycastOrigin3 = new Vector2(transform.position.x, transform.position.y - 0.7f);
-        Debug.DrawRay(raycastOrigin3, Vector2.down*0.25f, Color.blue);
+        //Vector2 raycastOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
+        //Debug.DrawRay(raycastOrigin, Vector2.right * 0.5f, Color.red);
+        //
+        //Vector2 raycastOrigin2 = new Vector2(transform.position.x - 1.75f, transform.position.y + 0.75f);
+        //Debug.DrawRay(raycastOrigin2, Vector2.right * 3.5f, Color.red);
+        //
+        //Vector2 raycastOrigin3 = new Vector2(transform.position.x, transform.position.y - 0.7f);
+        //Debug.DrawRay(raycastOrigin3, Vector2.down*0.25f, Color.blue);
         
         switch (_animate.change_element)
         {
@@ -88,7 +91,11 @@ public class CharacterAbilityController : MonoBehaviour
                 break;
         }
 
-        if (transform.position.x < deathReference.transform.position.x){
+        //if (transform.position.x < deathReference.transform.position.x){
+        //Debug.Log($"X: {transform.position.x}, ScreenWidth: {Screen.width}");
+
+        Vector3 leftLimit = _cam.ScreenToWorldPoint(new Vector3(-Screen.width/2, 0, 0));
+        if (transform.position.x < leftLimit.x/2){
             if (FirstDeath == false){
                 Debug.Log("First Death!");
                 deathCanva.SetActive(true);
@@ -96,6 +103,7 @@ public class CharacterAbilityController : MonoBehaviour
             }
             else if (AdSeen == true){
                 Debug.Log("Second Death!");
+                SceneManager.LoadScene("end_game");
             }
         }
 
@@ -104,7 +112,7 @@ public class CharacterAbilityController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D hit)
     {
-        Debug.Log("CollisonEnter");
+        //Debug.Log("CollisonEnter");
         if (hit.gameObject.CompareTag("Ground"))
             _isGrounded = true;
 
@@ -124,12 +132,12 @@ public class CharacterAbilityController : MonoBehaviour
             //}
             List<ContactPoint2D> contacts = new List<ContactPoint2D>();
             hit.GetContacts(contacts);
-            Debug.Log(contacts.Count);
+            //Debug.Log(contacts.Count);
             foreach (ContactPoint2D contact in contacts)
             {
                 if (contact.point.y < transform.position.y)
                 {
-                    Debug.Log("Is ground");
+                    //Debug.Log("Is ground");
                     _isGrounded = true;
                     isJumping = false;
                     break;

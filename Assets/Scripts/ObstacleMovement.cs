@@ -115,4 +115,12 @@ public class ObstacleMovement : MonoBehaviour
         if (_currObstacleB != null)
             _currObstacleB.Transform.position = _bTransform.position;
     }
+
+    public void ResetObstacles()
+    {
+        _currObstacleA.Transform.position = new Vector3(100, 100, 0);
+        _currObstacleB.Transform.position = new Vector3(100, 100, 0);
+        _currObstacleA = null;
+        _currObstacleB = null;
+    }
 }

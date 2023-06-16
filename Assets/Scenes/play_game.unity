@@ -12224,6 +12224,7 @@ MonoBehaviour:
   adCompleted: 0
   player: {fileID: 1001082165}
   deathCanva: {fileID: 923513046}
+  obstacle: {fileID: 343459551}
 --- !u!4 &813942655
 Transform:
   m_ObjectHideFlags: 0
@@ -13743,6 +13744,10 @@ PrefabInstance:
       propertyPath: deathCanva
       value: 
       objectReference: {fileID: 923513046}
+    - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
+      propertyPath: CameraObject
+      value: 
+      objectReference: {fileID: 1409034369}
     - target: {fileID: 495612018970480560, guid: 505fe6b35cde014989fa13e14c1bbdf0, type: 3}
       propertyPath: dashCooldown
       value: 2
