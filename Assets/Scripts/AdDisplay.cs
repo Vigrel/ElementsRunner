@@ -13,6 +13,8 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
     public string myAdStatus = "";
     public bool adStarted;
     public bool adCompleted;
+    public GameObject player;
+    public GameObject deathCanva;
 
     private bool testMode = true;
 
@@ -87,6 +89,9 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
     {
         adCompleted = showCompletionState == UnityAdsShowCompletionState.COMPLETED;
         Debug.Log("Ad Completed: " + adUnitId);
+        deathCanva.SetActive(false);
+        player.transform.position = new Vector2(0, player.transform.position.y);
+        player.GetComponent<CharacterAbilityController>().AdSeen = true;
     }
 
 }

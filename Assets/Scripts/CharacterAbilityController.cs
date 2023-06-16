@@ -12,6 +12,8 @@ public class CharacterAbilityController : MonoBehaviour
     // General variables
     //private bool _touchedScreen;
     private bool _isGrounded = true;
+    private bool FirstDeath = false;
+    public bool AdSeen = false;
     private Animate _animate;
     private Rigidbody2D _rb;
     private CapsuleCollider2D _collider;
@@ -19,6 +21,9 @@ public class CharacterAbilityController : MonoBehaviour
     // WindAbility variables
     public ParticleSystem dashParticleSystem;
     public GameObject obstacleManager;
+    public GameObject deathReference;
+    public GameObject deathCanva;
+
     private ObstacleMovement _obstacleMovement;
     public float dashMultiplier = 1f;
     public float dashCooldown;
@@ -54,6 +59,8 @@ public class CharacterAbilityController : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _groundMovement = grounds.GetComponent<GroundMovement>();
         _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
+        deathCanva.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -80,6 +87,19 @@ public class CharacterAbilityController : MonoBehaviour
                 WindAbility();
                 break;
         }
+
+        if (transform.position.x < deathReference.transform.position.x){
+            if (FirstDeath == false){
+                Debug.Log("First Death!");
+                deathCanva.SetActive(true);
+                FirstDeath = true;
+            }
+            else if (AdSeen == true){
+                Debug.Log("Second Death!");
+            }
+        }
+
+
     }
 
     void OnCollisionEnter2D(Collision2D hit)
