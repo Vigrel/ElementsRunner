@@ -23,7 +23,7 @@ public class MainMenuUI : MonoBehaviour
     public Sprite SFXOffImg;
     public Sprite SFXOnImg;
 
-    private bool _musicEnabled = true;
+    // private bool _musicEnabled = true;
     private bool _sfxEnabled = true;
     private MusicController _musicController;
     private Image _musicToggleImage;
@@ -36,9 +36,18 @@ public class MainMenuUI : MonoBehaviour
     void Start()
     {
         startButton.SetActive(true);
+        musicSoundtrack = GameObject.Find("MusicSoundtrack");
         _musicController = musicSoundtrack.GetComponent<MusicController>();
         _musicToggleImage = musicToggle.GetComponent<Image>();
         _SFXToggleImage = SFXToggle.GetComponent<Image>();
+        if (_musicController.musicEnabled)
+        {
+            _musicToggleImage.sprite = musicOnImg;
+        }
+        else
+        {
+            _musicToggleImage.sprite = musicOffImg;
+        }
     }
 
     public void playGame()
@@ -64,13 +73,13 @@ public class MainMenuUI : MonoBehaviour
     {
         if (_musicController.musicEnabled)
         {
-            _musicEnabled = false;
+            // _musicEnabled = false;
             _musicController.StopMusic();
             _musicToggleImage.sprite = musicOffImg;
         }
         else
         {
-            _musicEnabled = true;
+            // _musicEnabled = true;
             _musicController.PlayMusic();
             _musicToggleImage.sprite = musicOnImg;
         }

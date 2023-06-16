@@ -1,38 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicController : MonoBehaviour
 {
     private static MusicController instance = null;
+    private static AudioSource audioSource;
     public bool musicEnabled = true;
 
-    // Start is called before the first frame update
+    // Static reference to the instance
+    public static MusicController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<MusicController>();
+
+                // If there is no instance in the scene, create a new one
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject("MusicController");
+                    instance = obj.AddComponent<MusicController>();
+                }
+
+                // Ensure that the instance is not destroyed when loading a new scene
+                DontDestroyOnLoad(instance.gameObject);
+            }
+
+            return instance;
+        }
+    }
+
     void Awake()
     {
-        if (instance != null)
+        // If an instance already exists and it's not this one, destroy this GameObject
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+
+        // Set the instance and mark it as persistent between scene changes
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void StopMusic()
     {
         // Stop the music from playing
-        gameObject.SetActive(false);
-
+        audioSource.Stop();
         musicEnabled = false;
     }
 
     public void PlayMusic()
     {
-        gameObject.SetActive(true);
-
+        audioSource.Play();
         musicEnabled = true;
     }
 }
