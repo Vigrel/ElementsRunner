@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +59,15 @@ public class CharacterAbilityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector2 raycastOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
+        Debug.DrawRay(raycastOrigin, Vector2.right * 0.5f, Color.red);
+        
+        Vector2 raycastOrigin2 = new Vector2(transform.position.x - 1.75f, transform.position.y + 0.75f);
+        Debug.DrawRay(raycastOrigin2, Vector2.right * 3.5f, Color.red);
+        
+        Vector2 raycastOrigin3 = new Vector2(transform.position.x, transform.position.y - 0.7f);
+        Debug.DrawRay(raycastOrigin3, Vector2.down*0.25f, Color.blue);
+        
         switch (_animate.change_element)
         {
             case 0:
@@ -74,12 +84,59 @@ public class CharacterAbilityController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D hit)
     {
+        Debug.Log("CollisonEnter");
         if (hit.gameObject.CompareTag("Ground"))
             _isGrounded = true;
 
         if (hit.gameObject.CompareTag("Obstacle"))
-            SceneManager.LoadScene("end_game");
+        {
+            //Debug.Log("Is Obstacle");
+            //// verify if collision was on top of the obstacle
+            //Vector2 raycastOrigin = new Vector2(transform.position.x, transform.position.y - 0.85f);
+            //RaycastHit2D hit2D = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.25f);
+            //Debug.Log(hit2D.collider.tag);
+
+            //if (hit2D)
+            //{
+            //    Debug.Log(hit2D.collider.tag);
+            //    _isGrounded = true;
+            //    isJumping = false;
+            //}
+            List<ContactPoint2D> contacts = new List<ContactPoint2D>();
+            hit.GetContacts(contacts);
+            Debug.Log(contacts.Count);
+            foreach (ContactPoint2D contact in contacts)
+            {
+                if (contact.point.y < transform.position.y)
+                {
+                    Debug.Log("Is ground");
+                    _isGrounded = true;
+                    isJumping = false;
+                    break;
+                }
+            }
+        }
+
+        //if (hit.gameObject.CompareTag("Obstacle"))
+        //    SceneManager.LoadScene("end_game");
     }
+
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    List<ContactPoint2D> contacts = new List<ContactPoint2D>();
+    //    collision.GetContacts(contacts);
+    //    foreach (ContactPoint2D contact in contacts)
+    //    {
+    //        if (contact.point.y < transform.position.y && 
+    //            (contact.point.y - transform.position.y) < 0.75f)
+    //        {
+    //            Debug.Log("Is ground");
+    //            _isGrounded = true;
+    //            isJumping = false;
+    //            break;
+    //        }
+    //    }
+    //}
 
     private void FireAbility()
     {
@@ -100,10 +157,11 @@ public class CharacterAbilityController : MonoBehaviour
         {
             // Calculate the force needed to reach the maximum allowed velocity
             Vector2 currentVelocity = _rb.velocity;
-            float forceY = Mathf.Max(
-                0f,
-                (maxVerticalVelocity - currentVelocity.y) * _rb.mass * maxVerticalVelocity / Time.fixedDeltaTime
-            );
+            //float forceY = Mathf.Max(
+            //    0f,
+            //    (maxVerticalVelocity - currentVelocity.y) * _rb.mass * maxVerticalVelocity / Time.fixedDeltaTime
+            //);
+            float forceY = _rb.mass * maxVerticalVelocity / Time.fixedDeltaTime;
 
             // Clamp the force to the maximum jump force and add it to the Rigidbody
             Vector2 forceToAdd = new Vector2(0f, forceY);
@@ -137,11 +195,9 @@ public class CharacterAbilityController : MonoBehaviour
                     _dashStarted = false;
                     _dashCooldownTimer = _dashDuration + dashCooldown;
                     _dashDuration = Mathf.Max((_endTime - _startTime), 0.2f) * dashMultiplier;
-                    //_obstacleMovement.SetCurrentObstacleCollider(false);
                     
                     // Ignore obstacles
-                    _rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-                    _collider.enabled = false;
+                    _obstacleMovement.IgnoreObstacleCollision(true);
                     
                     // Stop the particle system
                     dashParticleSystem.Stop();
@@ -158,17 +214,18 @@ public class CharacterAbilityController : MonoBehaviour
         {
             if ((_endTime + _dashDuration) < Time.time)
             {
+                if (WillCollide()) return;
                 _groundMovement.SetDefaultSpeed();
                 isDashing = false;
-                //_obstacleMovement.SetCurrentObstacleCollider(true);
+                
+                // Stop ignoring obstacles
+                _obstacleMovement.IgnoreObstacleCollision(false);
+                
                 // Remove transparency from the sprite
                 Color color = _spriteRenderer.color;
                 color.a = 1f;
                 _spriteRenderer.color = color;
                 
-                // Stop ignoring obstacles
-                //_rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-                _collider.enabled = true;
                 return;
             }
 
@@ -206,5 +263,24 @@ public class CharacterAbilityController : MonoBehaviour
             isGliding = false;
             _rb.gravityScale = defaultGravityScale;
         }
+    }
+    
+    private bool WillCollide()
+    {
+        // Perform raycast to the right
+        //Vector2 rightOrigin = new Vector2(transform.position.x + 0.5f, transform.position.y);
+        //RaycastHit2D hitRight = Physics2D.Raycast(rightOrigin, Vector2.right, 0.5f);
+        //
+        //// Perform raycast to the left
+        //Vector2 leftOrigin = new Vector2(transform.position.x - 0.5f, transform.position.y);
+        //RaycastHit2D hitLeft = Physics2D.Raycast(leftOrigin, Vector2.left, 0.5f);
+        //
+        //if (!hitRight && !hitLeft) return false;
+        //return hitRight.collider.CompareTag("Obstacle") || hitRight.collider.CompareTag("Obstacle");
+        
+        Vector2 raycastOrigin = new Vector2(transform.position.x - 1.75f, transform.position.y + 0.75f);
+        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.right, 3.5f);
+        if (!hit) return false;
+        return hit.collider.CompareTag("Obstacle");
     }
 }

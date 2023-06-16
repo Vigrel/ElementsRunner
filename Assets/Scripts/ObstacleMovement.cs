@@ -11,9 +11,11 @@ public class ObstacleComponents
 {
     public GameObject Object { get; }
     public Transform Transform { get; }
-    public TilemapCollider2D Collider { get; }
+    //public TilemapCollider2D Collider { get; }
+    public CompositeCollider2D Collider { get; }
     
-    public ObstacleComponents(GameObject _object, Transform _transform, TilemapCollider2D _collider)
+    //public ObstacleComponents(GameObject _object, Transform _transform, TilemapCollider2D _collider)
+    public ObstacleComponents(GameObject _object, Transform _transform, CompositeCollider2D _collider)
     {
         Object = _object;
         Transform = _transform;
@@ -40,6 +42,7 @@ public class ObstacleMovement : MonoBehaviour
     private List<ObstacleComponents> _obstacleComponentsList = new List<ObstacleComponents>();
     
     // Current obstacle variables
+    private CapsuleCollider2D _playerCollider;
     private ObstacleComponents _currObstacleA;
     private ObstacleComponents _currObstacleB;
     private bool _localIsARight;
@@ -52,12 +55,15 @@ public class ObstacleMovement : MonoBehaviour
                                       .First();
     }
 
-    public void SetCurrentObstacleCollider(bool state)
+    public void IgnoreObstacleCollision(bool ignore)
     {
-        if(_currObstacleA != null)
-            _currObstacleA.Collider.enabled = state;
+        if (_currObstacleA != null)
+            Physics2D.IgnoreCollision(_playerCollider, _currObstacleA.Collider, ignore); 
+            //_currObstacleA.Collider.enabled = state;
+            
         if(_currObstacleB != null)
-            _currObstacleB.Collider.enabled = state;
+            Physics2D.IgnoreCollision(_playerCollider, _currObstacleB.Collider, ignore); 
+            //_currObstacleB.Collider.enabled = state;
     }
     
     
@@ -69,7 +75,8 @@ public class ObstacleMovement : MonoBehaviour
                 new ObstacleComponents(
                     el,
                     el.GetComponent<Transform>(), 
-                    el.GetComponent<TilemapCollider2D>())
+                    //el.GetComponent<TilemapCollider2D>())
+                    el.GetComponent<CompositeCollider2D>())
                 );
         }
     }
@@ -77,7 +84,9 @@ public class ObstacleMovement : MonoBehaviour
     private void Start()
     {
         FillObstaclesComponentsList();
+        
         _playerAbilityScript = player.GetComponent<CharacterAbilityController>();
+        _playerCollider = player.GetComponent<CapsuleCollider2D>();
         
         _groundScript = grounds.GetComponent<GroundMovement>();
         _aTransform = groundA.transform;
