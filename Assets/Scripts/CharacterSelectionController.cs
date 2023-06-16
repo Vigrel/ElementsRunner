@@ -11,6 +11,7 @@ public class CharacterSelectionController : MonoBehaviour
     private bool _directionChosen;
     private CharacterAbilityController _abilityController;
     private float timer = 0f;
+    private SpriteRenderer _spriteRenderer;
 
     private string SwipeDirection()
     {
@@ -25,6 +26,7 @@ public class CharacterSelectionController : MonoBehaviour
     {
         _animate = GetComponent<Animate>();
         _abilityController = GetComponent<CharacterAbilityController>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -91,6 +93,11 @@ public class CharacterSelectionController : MonoBehaviour
                 // "right" => 3,
                 _ => _animate.change_element
             };
+
+            Color color = _spriteRenderer.color;
+            color.b = 1f;
+            color.g = 1f;
+            _spriteRenderer.color = color;
         }
     }
 }
