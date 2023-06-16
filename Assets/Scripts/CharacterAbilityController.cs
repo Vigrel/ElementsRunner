@@ -19,6 +19,10 @@ public class CharacterAbilityController : MonoBehaviour
     private CapsuleCollider2D _collider;
     public GameObject CameraObject;
     private Camera _cam;
+    
+    // Score
+    public GameObject score;
+    private ScoreController _scoreScript;
 
     // WindAbility variables
     public ParticleSystem dashParticleSystem;
@@ -61,6 +65,7 @@ public class CharacterAbilityController : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _groundMovement = grounds.GetComponent<GroundMovement>();
         _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
+        _scoreScript = score.GetComponent<ScoreController>();
         _cam = CameraObject.GetComponent<Camera>();
         deathCanva.SetActive(false);
     }
@@ -98,13 +103,16 @@ public class CharacterAbilityController : MonoBehaviour
         {
             if (FirstDeath == false)
             {
-                Debug.Log("First Death!");
+                //Debug.Log("First Death!");
                 deathCanva.SetActive(true);
+                _scoreScript.PauseScore();
                 FirstDeath = true;
             }
             else if (AdSeen == true)
             {
-                Debug.Log("Second Death!");
+                //Debug.Log("Second Death!");
+                _scoreScript.PauseScore();
+                _scoreScript.SaveScore();
                 SceneManager.LoadScene("end_game");
             }
         }

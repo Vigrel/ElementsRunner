@@ -17,6 +17,10 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
     public GameObject deathCanva;
     public GameObject obstacle;
     private ObstacleMovement _obstacleMovementScript;
+    
+    // Score
+    public GameObject score;
+    private ScoreController _scoreControllerScript;
 
     private bool testMode = true;
 
@@ -32,6 +36,7 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
         #endif
 
         _obstacleMovementScript = obstacle.GetComponent<ObstacleMovement>();
+        _scoreControllerScript = score.GetComponent<ScoreController>();
     }
 
     // Update is called once per frame
@@ -93,6 +98,8 @@ public class AdDisplay : MonoBehaviour, IUnityAdsInitializationListener, IUnityA
         adCompleted = showCompletionState == UnityAdsShowCompletionState.COMPLETED;
         //Debug.Log("Ad Completed: " + adUnitId);
         deathCanva.SetActive(false);
+        _scoreControllerScript.ResumeScore();
+        
         player.transform.position = new Vector2(0, 0);
         _obstacleMovementScript.ResetObstacles();
         player.GetComponent<CharacterAbilityController>().AdSeen = true;
