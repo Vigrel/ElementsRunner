@@ -88,7 +88,7 @@ public class CharacterSelectionController : MonoBehaviour
                 "up" => 0,
                 "down" => 1,
                 "left" => 2,
-                "right" => 3,
+                // "right" => 3,
                 _ => _animate.change_element
             };
         }

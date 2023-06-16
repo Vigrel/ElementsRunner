@@ -29,7 +29,7 @@ public class CharacterAbilityController : MonoBehaviour
     private ObstacleMovement _obstacleMovement;
     public float dashMultiplier = 1f;
     public float dashCooldown;
-    public float dashTransparency = 0.2f;  
+    public float dashTransparency = 0.2f;
     public GameObject grounds;
     public bool isDashing = false;
     private bool _dashStarted = false;
@@ -43,7 +43,7 @@ public class CharacterAbilityController : MonoBehaviour
     // FireAbility variables
     public float maxVerticalVelocity = 7f;
     public bool isJumping = false;
-    
+
     // WaterAbility variables
     public float defaultGravityScale = 1f;
     public float glideGravityScale = 0.5f;
@@ -63,7 +63,6 @@ public class CharacterAbilityController : MonoBehaviour
         _obstacleMovement = obstacleManager.GetComponent<ObstacleMovement>();
         _cam = CameraObject.GetComponent<Camera>();
         deathCanva.SetActive(false);
-
     }
 
     // Update is called once per frame
@@ -77,7 +76,7 @@ public class CharacterAbilityController : MonoBehaviour
         //
         //Vector2 raycastOrigin3 = new Vector2(transform.position.x, transform.position.y - 0.7f);
         //Debug.DrawRay(raycastOrigin3, Vector2.down*0.25f, Color.blue);
-        
+
         switch (_animate.change_element)
         {
             case 0:
@@ -94,20 +93,21 @@ public class CharacterAbilityController : MonoBehaviour
         //if (transform.position.x < deathReference.transform.position.x){
         //Debug.Log($"X: {transform.position.x}, ScreenWidth: {Screen.width}");
 
-        Vector3 leftLimit = _cam.ScreenToWorldPoint(new Vector3(-Screen.width/2, 0, 0));
-        if (transform.position.x < leftLimit.x/2){
-            if (FirstDeath == false){
+        Vector3 leftLimit = _cam.ScreenToWorldPoint(new Vector3(-Screen.width / 2, 0, 0));
+        if (transform.position.x < leftLimit.x / 2)
+        {
+            if (FirstDeath == false)
+            {
                 Debug.Log("First Death!");
                 deathCanva.SetActive(true);
                 FirstDeath = true;
             }
-            else if (AdSeen == true){
+            else if (AdSeen == true)
+            {
                 Debug.Log("Second Death!");
                 SceneManager.LoadScene("end_game");
             }
         }
-
-
     }
 
     void OnCollisionEnter2D(Collision2D hit)
@@ -155,7 +155,7 @@ public class CharacterAbilityController : MonoBehaviour
     //    collision.GetContacts(contacts);
     //    foreach (ContactPoint2D contact in contacts)
     //    {
-    //        if (contact.point.y < transform.position.y && 
+    //        if (contact.point.y < transform.position.y &&
     //            (contact.point.y - transform.position.y) < 0.75f)
     //        {
     //            Debug.Log("Is ground");
@@ -217,19 +217,19 @@ public class CharacterAbilityController : MonoBehaviour
                     break;
 
                 case TouchPhase.Ended:
-                    if (!_dashStarted) return;
+                    if (!_dashStarted)
+                        return;
                     _endTime = Time.time;
                     isDashing = true;
                     _dashStarted = false;
-                    _dashCooldownTimer = _dashDuration + dashCooldown;
                     _dashDuration = Mathf.Max((_endTime - _startTime), 0.2f) * dashMultiplier;
-                    
+
                     // Ignore obstacles
                     _obstacleMovement.IgnoreObstacleCollision(true);
-                    
+
                     // Stop the particle system
                     dashParticleSystem.Stop();
-                    
+
                     // Add transparency to the sprite
                     Color color = _spriteRenderer.color;
                     color.a = dashTransparency;
@@ -237,23 +237,33 @@ public class CharacterAbilityController : MonoBehaviour
                     break;
             }
         }
+        if (_dashCooldownTimer > Time.time)
+        {
+            float cooldownPct = 1f - ((_dashCooldownTimer - Time.time) / dashCooldown);
+            Color color = _spriteRenderer.color;
+            color.b = cooldownPct;
+            color.g = cooldownPct;
+            _spriteRenderer.color = color;
+        }
 
         if (isDashing)
         {
             if ((_endTime + _dashDuration) < Time.time)
             {
-                if (WillCollide()) return;
+                if (WillCollide())
+                    return;
                 _groundMovement.SetDefaultSpeed();
                 isDashing = false;
-                
+                _dashCooldownTimer = Time.time + dashCooldown;
+
                 // Stop ignoring obstacles
                 _obstacleMovement.IgnoreObstacleCollision(false);
-                
+
                 // Remove transparency from the sprite
                 Color color = _spriteRenderer.color;
                 color.a = 1f;
                 _spriteRenderer.color = color;
-                
+
                 return;
             }
 
@@ -268,7 +278,7 @@ public class CharacterAbilityController : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             if (touch.position.x < (Screen.width / 2))
                 return;
-            
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -292,7 +302,7 @@ public class CharacterAbilityController : MonoBehaviour
             _rb.gravityScale = defaultGravityScale;
         }
     }
-    
+
     private bool WillCollide()
     {
         // Perform raycast to the right
@@ -305,10 +315,14 @@ public class CharacterAbilityController : MonoBehaviour
         //
         //if (!hitRight && !hitLeft) return false;
         //return hitRight.collider.CompareTag("Obstacle") || hitRight.collider.CompareTag("Obstacle");
-        
-        Vector2 raycastOrigin = new Vector2(transform.position.x - 1.75f, transform.position.y + 0.75f);
+
+        Vector2 raycastOrigin = new Vector2(
+            transform.position.x - 1.75f,
+            transform.position.y + 0.75f
+        );
         RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.right, 3.5f);
-        if (!hit) return false;
+        if (!hit)
+            return false;
         return hit.collider.CompareTag("Obstacle");
     }
 }
