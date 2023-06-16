@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TouchPhase = UnityEngine.TouchPhase;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectionController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class CharacterSelectionController : MonoBehaviour
     private Vector2 _direction;
     private bool _directionChosen;
     private CharacterAbilityController _abilityController;
+    private float timer = 0f;
 
     private string SwipeDirection()
     {
@@ -27,13 +29,38 @@ public class CharacterSelectionController : MonoBehaviour
 
     private void Update()
     {
+        // Check if the current scene's name is equal to the target scene name
+        if (SceneManager.GetActiveScene().name == "main_menu")
+        {
+            timer += Time.deltaTime;
+            if (timer >= 4f)
+            {
+                // Reset the timer
+                timer = 0f;
+
+                // Increment the current element
+                if (_animate.change_element == 2)
+                {
+                    _animate.change_element = 0; // Reset the current element to the first one
+                }
+                else
+                {
+                    _animate.change_element++;
+                }
+            }
+            return;
+        }
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
-            if (touch.position.x > Screen.width / 2) return;
-            if (_abilityController.isDashing == true) return;
-            if (_abilityController.isGliding == true) return;
+            if (touch.position.x > Screen.width / 2)
+                return;
+            if (_abilityController.isDashing == true)
+                return;
+            if (_abilityController.isGliding == true)
+                return;
 
             switch (touch.phase)
             {
